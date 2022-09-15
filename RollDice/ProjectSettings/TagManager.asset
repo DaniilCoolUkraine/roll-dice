@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Missile
+  - Amulet
+  - Hand1
+  - Hand2
+  - ArmourSet
+  - Pet
   layers:
   - Default
   - TransparentFX

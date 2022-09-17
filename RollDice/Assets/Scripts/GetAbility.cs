@@ -4,20 +4,17 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-public class ShowAbility : MonoBehaviour
+public class GetAbility : MonoBehaviour
 {
+    public GameObject sideChecker;
     private DiceSideChecker side;
     
     private void Awake()
     {
-        side = FindObjectOfType<DiceSideChecker>();
-    }
-    void Update()
-    {
-        
+        side = sideChecker.gameObject.GetComponent<DiceSideChecker>();
     }
 
-    public void Show()
+    public void GetInfo()
     {
         List<CubeSide> cubeSide = side.cubeSide.Distinct().ToList();
 

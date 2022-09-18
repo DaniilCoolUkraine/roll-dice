@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 public enum BattleState {START, PLAYER_TURN, ENEMY_TURN, WON, LOST}
@@ -17,21 +18,27 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] private BattleHUD playerHUD;
     [SerializeField] private BattleHUD enemyHUD;
 
+    [SerializeField] private DiceSideChecker playerSideChecker;
+    [SerializeField] private DiceSideChecker enemySideChecker;
+    
     [SerializeField] private List<DiceThrow> playerCubes;
     [SerializeField] private List<DiceThrow> enemyCubes;
-    
+
     private Unit playerInformation;
     private Unit enemyInformation;
-    
+
     public BattleState State { get; set; }
 
     public delegate void OnStateChangeHandler();
     public event OnStateChangeHandler OnStateChange;
 
+    private GetAbility getAbility;
+    
     private void Start()
     {
         State = BattleState.START;
         SetupBattle();
+        getAbility = new GetAbility();
     }
 
     private void SetupBattle()
@@ -49,24 +56,55 @@ public class BattleSystem : MonoBehaviour
     private IEnumerator PlayerTurn()
     {
         foreach (var playerCube in playerCubes)
-            OnStateChange += playerCube.ThrowDice;
+            if (playerCube.gameObject.activeSelf)
+                OnStateChange += playerCube.ThrowDice;
         
         yield return new WaitForSeconds(1f);
         
         OnStateChange?.Invoke();
         
         foreach (var playerCube in playerCubes)
-            OnStateChange -= playerCube.ThrowDice;
+            if (playerCube.gameObject.activeSelf)
+                OnStateChange -= playerCube.ThrowDice;
         
         //do some battle stuff:
         // get cube ability
-        // cast ability 
-        // update ui
+        List<IAbility> cubeAbilities = getAbility.GetCubeAbilities(playerSideChecker);
+        List<int> abilityLevels = getAbility.GetAbilityLevel(playerSideChecker);
         
-        yield return new WaitForSeconds(3f);
+        // cast ability 
+        for (int i = 0; i < cubeAbilities.Count; i++)
+        {
+            var ability = cubeAbilities[i];
+            int level = abilityLevels[i];
 
-        State = BattleState.ENEMY_TURN;
-        StartCoroutine(EnemyTurn());
+            if (ability is Damage || ability is Poison)
+            {
+                ability.CastAbility(level, enemyInformation);
+                enemyHUD.SetHealth(enemyInformation.GetHealth());
+            }
+            else
+            {
+                ability.CastAbility(level, playerInformation);
+                playerHUD.SetShield(playerInformation.GetShield());
+                playerHUD.SetHealth(playerInformation.GetHealth());
+            }
+        }
+        // update ui
+        enemyInformation.Shield(-enemyInformation.GetShield());
+        enemyHUD.SetShield(enemyInformation.GetShield());
+        // check hp
+        if (enemyInformation.GetHealth() <= 0)
+        {
+            State = BattleState.WON;
+            Debug.Log("u are winner");
+        }
+        else
+        {
+            yield return new WaitForSeconds(3f);
+            State = BattleState.ENEMY_TURN;
+            StartCoroutine(EnemyTurn());
+        }
     }
 
     private IEnumerator EnemyTurn()
@@ -85,13 +123,42 @@ public class BattleSystem : MonoBehaviour
         
         //do some battle stuff:
         // get cube ability
-        // cast ability 
-        // update ui
+        List<IAbility> cubeAbilities = getAbility.GetCubeAbilities(enemySideChecker);
+        List<int> abilityLevels = getAbility.GetAbilityLevel(enemySideChecker);
         
-        yield return new WaitForSeconds(3f);
+        // cast ability 
+        for (int i = 0; i < cubeAbilities.Count; i++)
+        {
+            var ability = cubeAbilities[i];
+            int level = abilityLevels[i];
 
-        State = BattleState.PLAYER_TURN;
-        StartCoroutine(PlayerTurn());
+            if (ability is Damage || ability is Poison)
+            {
+                ability.CastAbility(level, playerInformation);
+                playerHUD.SetHealth(playerInformation.GetHealth());
+            }
+            else
+            {
+                ability.CastAbility(level, enemyInformation);
+                enemyHUD.SetShield(enemyInformation.GetShield());
+                enemyHUD.SetHealth(enemyInformation.GetHealth());
+            }
+        }
+
+        // update ui
+        playerInformation.Shield(-playerInformation.GetShield());
+        playerHUD.SetShield(playerInformation.GetShield());
+        // check hp
+        if (playerInformation.GetHealth() <= 0)
+        {
+            State = BattleState.LOST;
+            Debug.Log("u are looser");
+        }
+        else
+        {
+            yield return new WaitForSeconds(3f);
+            State = BattleState.PLAYER_TURN;
+            StartCoroutine(PlayerTurn());
+        }
     }
-    
 }

@@ -1,11 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Shield : MonoBehaviour, IAbility
 {
-    public void CastAbility(int level)
+    //place shield on specified unit
+    public void CastAbility(int level, Unit unit)
     {
-        Debug.Log($"Shield {level}");
+        unit.Shield(level);
     }
 }

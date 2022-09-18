@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class Damage : MonoBehaviour, IAbility
 {
-    public void CastAbility(int level)
+    //damage specified unit
+    public void CastAbility(int level, Unit unit)
     {
-        Debug.Log($"Damaged {level}");
+        unit.Damage(level, unit);
     }
 }

@@ -40,5 +40,6 @@ public class Unit : MonoBehaviour, IDamageable, IReinforced
 
     public int GetHealth() => currentHealth;
     public int GetMaxHealth() => maxHealth;
-   
+
+    public int GetShield() => shield;
 }

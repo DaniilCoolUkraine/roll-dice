@@ -4,35 +4,47 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-public class GetAbility : MonoBehaviour
+public class GetAbility
 {
-    public GameObject sideChecker;
-    private DiceSideChecker side;
-    
-    private void Awake()
+    public List<IAbility> GetCubeAbilities(DiceSideChecker sideChecker)
     {
-        side = sideChecker.gameObject.GetComponent<DiceSideChecker>();
-    }
-
-    public void GetInfo()
-    {
-        List<CubeSide> cubeSide = side.cubeSide.Distinct().ToList();
-
+        List<IAbility> _cubeAbilities = new List<IAbility>();
+        
+        List<CubeSide> cubeSide = sideChecker.cubeSide.Distinct().ToList();
         if (cubeSide.Count != 0)
         {
-            foreach (var side in cubeSide)
+            foreach (var cube in cubeSide)
             {
-                int childOrder = side.Side;
-                GameObject child = side.Cube.transform.GetChild(childOrder - 1).gameObject;
-                child.GetComponent<IAbility>().CastAbility(GetLevel(child.transform.GetChild(1).name));
+                int childOrder = cube.Side;
+                GameObject child = cube.Cube.transform.GetChild(childOrder - 1).gameObject;
+                
+                _cubeAbilities.Add(child.GetComponent<IAbility>());
+                //child.GetComponent<IAbility>().CastAbility(GetLevel(child.transform.GetChild(1).name), null);
             }
         }
+
+        return _cubeAbilities;
     }
-    
-    private int GetLevel(string name)
+
+    public List<int> GetAbilityLevel(DiceSideChecker sideChecker)
     {
-        string extractedNum = Regex.Match(name, @"\d+").Value;
-        int level = Int32.Parse(extractedNum);
-        return level;
+        List<int> _abilityLevels = new List<int>();
+        
+        List<CubeSide> cubeSide = sideChecker.cubeSide.Distinct().ToList();
+        if (cubeSide.Count != 0)
+        {
+            foreach (var cube in cubeSide)
+            {
+                int childOrder = cube.Side;
+                GameObject child = cube.Cube.transform.GetChild(childOrder - 1).gameObject;
+                
+                string extractedNum = Regex.Match(child.transform.GetChild(1).name, @"\d+").Value;
+                int level = Int32.Parse(extractedNum);
+
+                _abilityLevels.Add(level);
+            }
+        }
+
+        return _abilityLevels;
     }
 }

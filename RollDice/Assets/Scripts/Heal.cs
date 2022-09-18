@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class Heal : MonoBehaviour, IAbility
 {
-    public void CastAbility(int level)
+    //heal specified unit
+    public void CastAbility(int level, Unit unit)
     {
-        Debug.Log($"Healed {level}");
+        unit.Heal(level);
     }
 }

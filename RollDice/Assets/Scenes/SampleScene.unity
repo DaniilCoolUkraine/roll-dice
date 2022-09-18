@@ -2987,7 +2987,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 36cea2be0146ff44088f8c39e1a5e781, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5567,6 +5567,8 @@ MonoBehaviour:
   enemyPosition: {fileID: 757163130}
   playerHUD: {fileID: 134719989}
   enemyHUD: {fileID: 978836186}
+  playerSideChecker: {fileID: 1878410595}
+  enemySideChecker: {fileID: 1879225394}
   playerCubes:
   - {fileID: 628331246}
   - {fileID: 1651389760}
@@ -8759,7 +8761,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 36cea2be0146ff44088f8c39e1a5e781, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -12392,7 +12394,7 @@ GameObject:
   - component: {fileID: 1878410594}
   - component: {fileID: 1878410595}
   m_Layer: 0
-  m_Name: DiceSideChecker
+  m_Name: PlayerDiceSideChecker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12449,7 +12451,7 @@ GameObject:
   - component: {fileID: 1879225395}
   - component: {fileID: 1879225394}
   m_Layer: 0
-  m_Name: DiceSideChecker
+  m_Name: EnemyDiceSideChecker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

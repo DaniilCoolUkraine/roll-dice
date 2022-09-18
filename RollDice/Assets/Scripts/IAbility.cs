@@ -1,4 +1,4 @@
 public interface IAbility
 {
-    void CastAbility(int level);
+    void CastAbility(int level, Unit unit);
 }

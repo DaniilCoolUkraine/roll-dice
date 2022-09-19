@@ -1,3 +1,4 @@
+//interface defines every damageable object
 public interface IDamageable
 {
    void TakeDamage(int amount);

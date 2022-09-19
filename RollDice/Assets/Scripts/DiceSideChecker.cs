@@ -1,17 +1,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//class to check side of cube
 public class DiceSideChecker : MonoBehaviour
 {
+    //list to store multiple cubes and its sides 
     public List<CubeSide> cubeSide = new List<CubeSide>();
     
     private void OnTriggerStay(Collider other)
     {
         var diceVelocity = other.gameObject.GetComponentInParent<DiceThrow>().DiceVelocity;
-        
+     
+        //check if dice velocity is zero
         if (diceVelocity == Vector3.zero)
         {
+            //get name of the side
             string nameOfSide = other.name;
+            //get parent of trigger 
             var parent = other.transform.parent.parent;
 
             switch (nameOfSide)
@@ -43,6 +48,7 @@ public class DiceSideChecker : MonoBehaviour
         cubeSide.Clear();
     }
 
+    //cube factory
     private CubeSide GetCube(GameObject parent, int side)
     {
         return new CubeSide(parent, side);
@@ -50,6 +56,7 @@ public class DiceSideChecker : MonoBehaviour
     
 }
 
+//struct to store cube and side facing up
 public struct CubeSide
 {
     public GameObject Cube { get; }

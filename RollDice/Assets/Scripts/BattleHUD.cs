@@ -8,6 +8,7 @@ public class BattleHUD : MonoBehaviour
     public Slider health;
     public Slider shield;
 
+    //initial ui set
     public void SetHUD(Unit unit)
     {
         nameText.text = unit.GetName();
@@ -15,11 +16,13 @@ public class BattleHUD : MonoBehaviour
         SetHealth(unit.GetHealth());
     }
 
+    //update health
     public void SetHealth(int amount)
     {
         health.value = amount;
     }
 
+    //update shield
     public void SetShield(int amount)
     {
         shield.maxValue = amount;

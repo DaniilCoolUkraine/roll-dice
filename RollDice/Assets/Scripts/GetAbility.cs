@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
+//class to get ability of cube and its level
 public class GetAbility
 {
     public List<IAbility> GetCubeAbilities(DiceSideChecker sideChecker)
     {
         List<IAbility> _cubeAbilities = new List<IAbility>();
         
+        //delete duplicated objects
         List<CubeSide> cubeSide = sideChecker.cubeSide.Distinct().ToList();
         if (cubeSide.Count != 0)
         {
@@ -19,7 +21,6 @@ public class GetAbility
                 GameObject child = cube.Cube.transform.GetChild(childOrder - 1).gameObject;
                 
                 _cubeAbilities.Add(child.GetComponent<IAbility>());
-                //child.GetComponent<IAbility>().CastAbility(GetLevel(child.transform.GetChild(1).name), null);
             }
         }
 
@@ -38,6 +39,7 @@ public class GetAbility
                 int childOrder = cube.Side;
                 GameObject child = cube.Cube.transform.GetChild(childOrder - 1).gameObject;
                 
+                //find number inside ability name
                 string extractedNum = Regex.Match(child.transform.GetChild(1).name, @"\d+").Value;
                 int level = Int32.Parse(extractedNum);
 

@@ -1,12 +1,13 @@
 using UnityEngine;
 
+//class defines every unit 
 public class Unit : MonoBehaviour, IDamageable, IReinforced
 {
     [SerializeField] private int currentHealth;
     [SerializeField] private int maxHealth;
     [SerializeField] private int shield;
     [SerializeField] private string unitName;
-
+    
     public void TakeDamage(int amount)
     {
         if (shield > amount)
